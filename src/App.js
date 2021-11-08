@@ -5,16 +5,22 @@ import "./App.css";
 // Constants
 const TWITTER_HANDLE = "AjeirC";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const TWITTER_HANDLE2 = "_buildspace";
-const TWITTER_LINK2 = `https://twitter.com/${TWITTER_HANDLE2}`;
+//const TWITTER_HANDLE2 = "_buildspace";
+// (Save for later connection ) > const TWITTER_LINK2 = `https://twitter.com/${TWITTER_HANDLE2}`;
+
+//Test Gifs
+const TEST_GIFS = [
+  "https://media4.giphy.com/media/d0DdMCREQChi3jGymW/giphy.gif?cid=790b7611589dba79477b24e381616deac8572ce327bdbd64&rid=giphy.gif&ct=g",
+  "https://media3.giphy.com/media/oBQZIgNobc7ewVWvCd/giphy.gif?cid=790b76118e8d082043b5fdf6641a4eeef567cac5763f0eb0&rid=giphy.gif&ct=g",
+  "https://media4.giphy.com/media/hgMS2c6Cd2XR8X7yrA/giphy.gif?cid=790b7611e439a4566ca2a3a934fe0ad94e0f9aaf0c6f2fb7&rid=giphy.gif&ct=g",
+  "https://media4.giphy.com/media/UK6iCwlyhtCoygMot5/giphy.gif?cid=790b7611cb177ed6848f533411bc7805cb330956aac070aa&rid=giphy.gif&ct=g"
+
+]
 
 const App = () => {
-  
-    //state 
-    const [walletAddress, setWalletAddress] = useState("null");
-  
-  
-  
+  //state
+  const [walletAddress, setWalletAddress] = useState("null");
+
   /*
    * Function checks if the wallet is
    * connected or not
@@ -34,11 +40,9 @@ const App = () => {
           console.log(
             "Connected using Public key:",
             response.publicKey.toString()
-            
           );
-          
-          setWalletAddress(response.publicKey.toString());
 
+          setWalletAddress(response.publicKey.toString());
         }
       } else {
         alert(
@@ -56,7 +60,7 @@ const App = () => {
 
     if (solana) {
       const response = await solana.connect();
-      console.log('Connected with Public Key:', response.publicKey.toString());
+      console.log("Connected with Public Key:", response.publicKey.toString());
       setWalletAddress(response.publicKey.toString());
     }
   };
@@ -70,31 +74,45 @@ const App = () => {
       className="cta-button connect-wallet-button"
       onClick={connectWallet}
     >
-      Connect to wallet👻!
+      Connect to wallet 👻
     </button>
   );
 
+  const renderConnectedContainer = () => (
+  <div className="connected-container">
+    <div className="gif-grid">
+      {TEST_GIFS.map(gif => (
+        <div className="gif-item" key={gif}>
+          <img src={gif} alt={gif} />
+        </div>
+      ))}
+    </div>
+  </div>
+);
   /*
    * When the wallet function launches,
    * Checking to see if its connected
    */
+
   useEffect(() => {
-    window.addEventListener("load", async (event) => {
+    const onLoad = async () => {
       await checkIfWalletIsConnected();
-    });
+    };
+    window.addEventListener("load", onLoad);
+    return () => window.removeEventListener("load", onLoad);
   }, []);
 
   return (
     <div className="App">
-         {/* Added for some style stuff */}
+      {/* Added for some style stuff */}
       <div className="container">
         <div className="header-container">
-          <p className="header">🖼 GIF Portal</p>
-          <p className="sub-text">
-            View your GIF collection in the metaverse ✨
-          </p>
+          <p className="header">🚀💎 Crypto rabbit hole</p>
+          <p className="sub-text">Lets take a look at crypto culture ✨</p>
+          {!walletAddress && renderNotConnectedContainer()}
           {/* Render my wallet button*/}
-          {renderNotConnectedContainer()}
+          {walletAddress && renderConnectedContainer()}
+          
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
